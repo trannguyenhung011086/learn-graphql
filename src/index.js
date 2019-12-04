@@ -1,53 +1,29 @@
 const path = require('path');
 const { GraphQLServer } = require('graphql-yoga');
+const { prisma } = require('./generated/prisma-client');
 
-let links = [
-    {
-        id: 'link-0',
-        url: 'www.howtographql.com',
-        description: 'Fullstack tutorial for GraphQL',
-    },
-];
-
-let idCount = links.length;
+const Query = require('./resolvers/Query');
+const Mutation = require('./resolvers/Mutation');
+const Subscription = require('./resolvers/Subscription');
+const User = require('./resolvers/User');
+const Link = require('./resolvers/Link');
+const Vote = require('./resolvers/Vote');
 
 const resolvers = {
-    Query: {
-        info: () => 'API of a Hackernews clone',
-        feed: () => links,
-        link: (parent, args) => links.find(link => link.id === args.id),
-    },
-
-    Mutation: {
-        post: (parent, args) => {
-            const link = {
-                id: `link-${idCount++}`,
-                description: args.description,
-                url: args.url,
-            };
-            links.push(link);
-            return link;
-        },
-        updateLink: (parent, args) => {
-            const index = links.findIndex(link => link.id === args.id);
-            links[index] = {
-                id: args.id,
-                description: args.description,
-                url: args.url,
-            };
-            return links[index];
-        },
-        deleteLink: (parent, args) => {
-            const index = links.findIndex(link => link.id === args.id);
-            links.splice(index, 1);
-            return links[index];
-        },
-    },
+    Query,
+    Mutation,
+    Subscription,
+    User,
+    Link,
+    Vote,
 };
 
 const server = new GraphQLServer({
     typeDefs: path.resolve(__dirname, './schema.graphql'),
     resolvers,
+    context: request => {
+        return { ...request, prisma };
+    },
 });
 
 server.start(() => console.log('Server is running on port 4000'));
