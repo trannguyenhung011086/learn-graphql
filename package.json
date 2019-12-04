@@ -1,0 +1,28 @@
+{
+    "name": "learn-graphql",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "eslint": "^6.7.2",
+        "graphql-yoga": "^1.18.3"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon -e js,mjs,ts,graphql,json src/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/trannguyenhung011086/learn-graphql.git"
+    },
+    "author": "Hung",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/trannguyenhung011086/learn-graphql/issues"
+    },
+    "homepage": "https://github.com/trannguyenhung011086/learn-graphql#readme"
+}
