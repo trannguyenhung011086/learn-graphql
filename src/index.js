@@ -8,6 +8,8 @@ app.use(cors());
 
 const schema = require('./schema/index');
 const resolvers = require('./resolvers/index');
+const models = require('./models');
+const { sequelize } = require('./models');
 
 let users = {
     1: {
@@ -46,6 +48,14 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.listen({ port: 4000 }, () => {
-    console.log('Server is running on http://localhost:4000/graphql');
+const eraseDatabaseOnSync = true;
+const createUsersWithMessages = require('./seedDb');
+
+sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+    if (eraseDatabaseOnSync) {
+        await createUsersWithMessages(models);
+    }
+    app.listen({ port: 4000 }, () => {
+        console.log('Apollo Server on http://localhost:4000/graphql');
+    });
 });
